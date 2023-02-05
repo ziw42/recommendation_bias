@@ -1,0 +1,139 @@
+---
+title: "Untitled"
+author: "Zian Wang"
+date: "2023/1/25"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+do_plot <- function(path) {
+  df = read.csv(path)
+  df$group = as.factor(df$group)
+  s = sort(unique(df$ave_metric))
+  df["group2"] = 0
+  for(t in 1:nrow(df)) {
+    df[t,]["group2"] = which(s == c(df[t,]["ave_metric"])$ave_metric)
+  }
+  return(df)
+}
+df = do_plot("A:/Ziwei_code_example/user main.csv")
+df$group2 = as.factor(df$group2)
+
+
+df %>% ggplot()+
+  geom_point(mapping = aes(x = metric, y = result, color = group2))+
+  xlab("User Mainstreamness")+
+  ylab("NDCG@15")+
+  theme_bw()
+
+df$result[is.na(df$result)] <- 0
+df %>% ggplot()+
+  geom_boxplot(mapping = aes(x = group2, y = result))+
+  geom_point(data = aggregate(df$result, by=list(type=df$group2), mean), mapping = aes(x = type, y = x), color = "red")+
+  xlab("Group")+
+  ylab("NDCG@15")+
+  theme_bw()
+
+ggplot()+
+  geom_boxplot(data = df, mapping = aes(x = group2, y = metric))+
+  geom_point(data = aggregate(df$metric, by=list(type=df$group2), mean), mapping = aes(x = type, y = x), color = "red")+
+  xlab("Group")+
+  ylab("User Mainstreamness")+
+  theme_bw()
+```
+
+```{r}
+df
+```
+
+```{r}
+df = do_plot("A:/Ziwei_code_example/item main.csv")
+df$group2 = as.factor(df$group2)
+
+
+df %>% ggplot()+
+  geom_point(mapping = aes(x = metric, y = result, color = group2))+
+  xlab("Item Mainstreamness")+
+  ylab("Performance")+
+  theme_bw()
+
+df %>% ggplot()+
+  geom_boxplot(mapping = aes(x = group2, y = result))+
+  geom_point(data = aggregate(df$result, by=list(type=df$group2), mean), mapping = aes(x = type, y = x), color = "red")+
+  xlab("Group")+
+  ylab("Performance")+
+  theme_bw()
+
+ggplot()+
+  geom_boxplot(data = df, mapping = aes(x = group2, y = metric))+
+  geom_point(data = aggregate(df$metric, by=list(type=df$group2), mean), mapping = aes(x = type, y = x), color = "red")+
+  xlab("Group")+
+  ylab("Item Mainstreamness")+
+  theme_bw()
+```
+
+```{r}
+df = do_plot("A:/Ziwei_code_example/user act.csv")
+df$group2 = as.factor(df$group2)
+
+
+df %>% ggplot()+
+  geom_point(mapping = aes(x = metric, y = result, color = group2))+
+  xlab("User Activeness")+
+  ylab("NDCG@15")+
+  theme_bw()
+
+df %>% ggplot()+
+  geom_boxplot(mapping = aes(x = group2, y = result))+
+  geom_point(data = aggregate(df$result, by=list(type=df$group2), mean), mapping = aes(x = type, y = x), color = "red")+
+  xlab("Group")+
+  ylab("NDCG@15")+
+  theme_bw()
+
+ggplot()+
+  geom_boxplot(data = df, mapping = aes(x = group2, y = metric))+
+  geom_point(data = aggregate(df$metric, by=list(type=df$group2), mean), mapping = aes(x = type, y = x), color = "red")+
+  xlab("Group")+
+  ylab("User Activeness")+
+  theme_bw()
+```
+
+```{r}
+df = do_plot("A:/Ziwei_code_example/item pop.csv")
+df$group2 = as.factor(df$group2)
+
+
+df %>% ggplot()+
+  geom_point(mapping = aes(x = metric, y = result, color = group2))+
+  xlab("Item Popularity")+
+  ylab("Performance")+
+  theme_bw()
+
+df %>% ggplot()+
+  geom_boxplot(mapping = aes(x = group2, y = result))+
+  geom_point(data = aggregate(df$result, by=list(type=df$group2), mean), mapping = aes(x = type, y = x), color = "red")+
+  xlab("Group")+
+  ylab("Performance")+
+  theme_bw()
+
+ggplot()+
+  geom_boxplot(data = df, mapping = aes(x = group2, y = metric))+
+  geom_point(data = aggregate(df$metric, by=list(type=df$group2), mean), mapping = aes(x = type, y = x), color = "red")+
+  xlab("Group")+
+  ylab("Item Popularity")+
+  theme_bw()
+```
+
+```{r}
+
+```
+
